@@ -3,7 +3,10 @@ import { OwnershipManager } from "./OwnershipManager";
 import { ConversationLifecycleManager } from "./ConversationLifecycleManager";
 import { MessageDeliveryManager } from "./MessageDeliveryManager";
 import { MessageReadManager } from "./MessageReadManager";
-
+import { DomainEventCollector } from "@/domain/eventing/DomainEventCollector";
+import { ConversationStartedEvent } from "@/domain/events/ConversationStartedEvent";
+import { DomainEvent } from "@/domain/events/DomainEvent";
+import { DomainEvent } from "@/domain/events/DomainEvent";
 export class ConversationAggregate {
   private readonly conversationManager =
     new ConversationManager();
@@ -19,6 +22,9 @@ export class ConversationAggregate {
 
   private readonly readManager =
     new MessageReadManager();
+
+  private readonly eventCollector =
+  new DomainEventCollector();
 
   hasMessages(): boolean {
     return this.conversationManager.hasMessages();
@@ -41,8 +47,12 @@ export class ConversationAggregate {
   }
 
   startConversation(): void {
-    this.lifecycleManager.start();
-  }
+  this.lifecycleManager.start();
+
+  this.eventCollector.collect(
+    new ConversationStartedEvent()
+  );
+}
   endConversation(): void {
   this.lifecycleManager.end();
 }
@@ -69,5 +79,11 @@ canCloseConversation(): boolean {
 }
 canAcquireOwnership(): boolean {
   return !this.isLocked();
+}
+getEvents(): DomainEvent[] {
+  return this.eventCollector.getEvents();
+}
+clearEvents(): void {
+  this.eventCollector.clear();
 }
 }
