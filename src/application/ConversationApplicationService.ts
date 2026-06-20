@@ -1,8 +1,11 @@
 import { ConversationAggregate } from "@/domain/conversation/ConversationAggregate";
 import { DomainEvent } from "@/domain/events/DomainEvent";
+import { ApplicationEventCollector } from "./events/ApplicationEventCollector";
 export class ConversationApplicationService {
   private readonly conversationAggregate =
     new ConversationAggregate();
+  private readonly eventCollector =
+  new ApplicationEventCollector();  
  startConversation(): void {
   this.conversationAggregate.startConversation();
 } 
@@ -32,5 +35,11 @@ hasEvents(): boolean {
 }
 countEvents(): number {
   return this.getEvents().length;
+}
+getApplicationEvents(): DomainEvent[] {
+  return this.eventCollector.getEvents();
+}
+clearApplicationEvents(): void {
+  this.eventCollector.clear();
 }
 }
