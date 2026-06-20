@@ -1,5 +1,5 @@
 import { ConversationAggregate } from "@/domain/conversation/ConversationAggregate";
-
+import { DomainEvent } from "@/domain/events/DomainEvent";
 export class ConversationApplicationService {
   private readonly conversationAggregate =
     new ConversationAggregate();
@@ -20,5 +20,17 @@ deliverMessage(): void {
 }
 markMessageAsRead(): void {
   this.conversationAggregate.markMessageAsRead();
+}
+getEvents(): DomainEvent[] {
+  return this.conversationAggregate.getEvents();
+}
+clearEvents(): void {
+  this.conversationAggregate.clearEvents();
+}
+hasEvents(): boolean {
+  return this.getEvents().length > 0;
+}
+countEvents(): number {
+  return this.getEvents().length;
 }
 }
