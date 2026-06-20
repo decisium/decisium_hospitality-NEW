@@ -58,4 +58,16 @@ acquireOwnership(): boolean {
 releaseOwnership(): void {
   this.ownershipManager.release();
 }
+canDeliverMessage(): boolean {
+  return this.isActive() && this.isLocked();
+}
+canReadMessage(): boolean {
+  return this.isDelivered();
+}
+canCloseConversation(): boolean {
+  return this.isActive();
+}
+canAcquireOwnership(): boolean {
+  return !this.isLocked();
+}
 }
