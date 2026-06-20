@@ -42,4 +42,17 @@ getApplicationEvents(): DomainEvent[] {
 clearApplicationEvents(): void {
   this.eventCollector.clear();
 }
+transferEvents(): void {
+  for (const event of this.getEvents()) {
+    this.eventCollector.collect(event);
+  }
+
+  this.clearEvents();
+}
+hasApplicationEvents(): boolean {
+  return this.eventCollector.hasEvents();
+}
+countApplicationEvents(): number {
+  return this.eventCollector.count();
+}
 }
